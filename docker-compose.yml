@@ -1,0 +1,63 @@
+
+version: '3'
+
+volumes:
+  prometheus_data: {}
+  grafana_storage: {}
+
+networks:
+  webapp-monitor:
+    driver: bridge
+
+services:
+
+  django_webapp:
+    build: .
+    container_name: django-webapp
+    command: sh -c "python3 /code/manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+    networks:
+      - webapp-monitor
+    volumes:
+      - ./webapp:/code
+
+  prometheus:
+    image: prom/prometheus:v2.14.0
+    container_name: prometheus
+    volumes:
+      - ./webapp/prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    networks:
+      - webapp-monitor
+    labels:
+      org.label-schema.group: "monitoring"
+    depends_on:
+      - django_webapp
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    user: "104"
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    networks:
+      - webapp-monitor
+    volumes:
+      - grafana_storage:/var/lib/grafana
+      - ./webapp/grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./webapp/grafana/config.monitoring
+    restart: always

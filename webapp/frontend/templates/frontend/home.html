@@ -1,0 +1,64 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Tracasa</title>
+
+    <link rel='shortcut icon' type='image/x-icon' href="" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+    <div style="text-align: center;">
+        <br>
+        <br>
+
+        <h1 class="display-h1" style="text-align: center;">
+            Django webapp
+        </h1>
+
+        <br>
+        <br>
+
+        <img class="img-fluid" src="{% static 'img/tracasa.png' %}">
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Aplicación</th>
+                    <th>Puerto</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Grafana</td>
+                    <td>3000</td>
+                </tr>
+
+                <tr>
+                    <td>Prometheus</td>
+                    <td>9090</td>
+                </tr>
+            </tbody>
+        </tr>
+    </div>
+
+</body>
+</html>
